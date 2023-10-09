@@ -3,7 +3,8 @@
 ## High Priority
 
 - [ ] updating with a scrolling option (the current one is not working)
-- [ ] creating documentation
+- [x] creating documentation
+- [ ] saving the bill !!
 
 ## Medium Priority
 
