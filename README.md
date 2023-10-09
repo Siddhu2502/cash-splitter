@@ -18,9 +18,7 @@ To use this application, follow the steps:
 
 1. Clone the repository
 
-```
-git clone https://github.com/Siddhu2502/cash-splitter
-```
+```git clone https://github.com/Siddhu2502/cash-splitter```
 
 2. Install dependencies
 
@@ -29,14 +27,17 @@ well there is none python ships with tkinter default !!
 
 3. Start the development server
 
-```
-python biller.py
-```
+```python biller.py```
 or 
-```
-python3 biller.py
-```
+```python3 biller.py```
 
+# Run this application as a stand alone app
+``` pip install pyinstaller ```
+
+Run this command to create a single executable file it will be inside the dist folder
+rest all folder is not that importatnt you can delete them if you want it will not affect the app
+
+```pyinstaller --onefile biller.py ```
 
 ## Data Model
 
