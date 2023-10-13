@@ -3,6 +3,20 @@ import tkinter as tk
 # Function to calculate the total for an item
 def calculate_item_total(price, quantity):
     return price * quantity
+    
+import json
+
+def save_data(data):
+    with open('expense_data.json', 'w') as f:
+        json.dump(data, f)
+
+def load_data():
+    try:
+        with open('expense_data.json', 'r') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return []
+
 
 # Function to add a new person
 def add_person():
@@ -17,13 +31,16 @@ def add_person():
     total_label.pack(side=tk.RIGHT, padx=10)
     
     name_entry.delete(0, tk.END)
-    
-    items = []
+    items = load_data()
     
     def add_item():
         item_name = item_entry.get()
-        price = float(price_entry.get())
-        quantity = float(quantity_entry.get())
+        try:
+           price = float(price_entry.get())
+           quantity = float(quantity_entry.get())
+        except:
+           price = 0.0
+           quantity = 0.0
         total = calculate_item_total(price, quantity)
         items.append((item_name, price, quantity, total))
         update_items()
@@ -61,7 +78,8 @@ def add_person():
         item_entry.grid(row=s_row, column=0)
         price_entry.grid(row=s_row, column=1)
         quantity_entry.grid(row=s_row, column=2)
-        add_item_button.grid(row=s_row + 1, columnspan=3)
+        add_item_button.grid(row=s_row + 1, columnspan=3)      
+        save_data(items)
           
     
     item_frame = tk.Frame(person_frame)
