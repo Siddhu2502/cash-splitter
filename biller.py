@@ -1,16 +1,32 @@
 import tkinter as tk
+import json
 
 # Function to calculate the total for an item
 def calculate_item_total(price, quantity):
     return price * quantity
     
-import json
-
+# Function to save the list of items
 def save_data(data):
+    """
+    Save the expense data to a JSON file.
+
+    Parameters:
+    data (list): List of dictionaries containing the expense data.
+
+    Returns:
+    None
+    """
     with open('expense_data.json', 'w') as f:
         json.dump(data, f)
 
+# Function to load the save file
 def load_data():
+    """
+    Load expense data from the JSON file.
+
+    Returns:
+    list: List of dictionaries containing the loaded expense data. If the file doesn't exist, returns an empty list.
+    """
     try:
         with open('expense_data.json', 'r') as f:
             return json.load(f)
