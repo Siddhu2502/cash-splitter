@@ -1,7 +1,24 @@
 import tkinter as tk
+import json
 
 # Initialize the main data dictionary
 data = {}
+
+# File path for saving and loading expense data
+data_file = "expense_data.json"
+
+# Function to save expense data to a JSON file
+def save_data():
+    with open(data_file, "w") as file:
+        json.dump(data, file)
+
+# Function to load previously saved expense data from a JSON file
+def load_data():
+    try:
+        with open(data_file, "r") as file:
+            return json.load(file)
+    except FileNotFoundError:
+        return {}
 
 # Function to add a new person
 def add_person():
@@ -10,6 +27,7 @@ def add_person():
         data[name] = {'items': []}
         update_display()
         name_entry.delete(0, tk.END)
+        save_data()  # Save data when a new person is added
 
 # Function to add a new item for a person
 def add_item(person, item_name, price, quantity):
@@ -19,6 +37,7 @@ def add_item(person, item_name, price, quantity):
         total = price * quantity
         data[person]['items'].append((item_name, price, quantity, total))
         update_display()
+        save_data()  # Save data when a new item is added
     except ValueError:
         # Handle invalid input
         pass
@@ -55,6 +74,7 @@ def update_display():
 def delete_person(person):
     del data[person]
     update_display()
+    save_data()  # Save data after a person is deleted
 
 # Main window
 root = tk.Tk()
@@ -89,5 +109,17 @@ price_entry.grid(row=1, column=1, padx=5)
 quantity_entry.grid(row=1, column=2, padx=5)
 add_item_button.grid(row=1, column=3, padx=5)
 
+# Load saved data
+data = load_data()
+update_display()
+
 # Start the main loop
 root.mainloop()
+
+"""
+In this updated code, I've added functions to save and load expense data using JSON serialization.
+The save_data function is called whenever a new person or item is added, and the load_data function is called to load saved data when the application is started.
+This ensures that your expense data is preserved between application runs.
+The data is saved in a file called "expense_data.json" in the same directory as your script.
+Make sure to modify the data_file variable to specify the desired file path if needed.
+"""
