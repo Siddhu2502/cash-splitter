@@ -1,94 +1,74 @@
 import tkinter as tk
 
-# Function to calculate the total for an item
-def calculate_item_total(price, quantity):
-    return price * quantity
+# Initialize the main data dictionary
+data = {}
 
 # Function to add a new person
 def add_person():
     name = name_entry.get()
-    person_frame = tk.Frame(main_frame, bd=2, relief=tk.RAISED)
-    person_frame.pack(pady=5, padx=10, fill=tk.BOTH)
-    
-    person_label = tk.Label(person_frame, text=name)
-    person_label.pack(side=tk.LEFT, padx=10)
-    
-    total_label = tk.Label(person_frame, text="Total: Rs-0")
-    total_label.pack(side=tk.RIGHT, padx=10)
-    
-    name_entry.delete(0, tk.END)
-    
-    items = []
-    
-    def add_item():
-        item_name = item_entry.get()
-        price = float(price_entry.get())
-        quantity = float(quantity_entry.get())
-        total = calculate_item_total(price, quantity)
-        items.append((item_name, price, quantity, total))
-        update_items()
-        item_entry.delete(0, tk.END)
-        price_entry.delete(0, tk.END)
-        quantity_entry.delete(0, tk.END)
-    
-    def delete_person():
-        person_frame.destroy()
-    
-    def delete_item(item_index):
-        del items[item_index]
-        update_items()
-    
-    def update_items():
-        total = sum(item[3] for item in items)
-        total_label.config(text=f"Total: Rs-{total}")
-        
-        for widget in item_frame.winfo_children():
-            widget.grid_forget()
-            
-        tk.Label(item_frame, text="Item").grid(row=0, column=0)
-        tk.Label(item_frame, text="Price").grid(row=0, column=1)
-        tk.Label(item_frame, text="Quantity").grid(row=0, column=2)
-        
-        for i, (item_name, price, quantity, total) in enumerate(items):
-            row_i = i + 1
-            tk.Label(item_frame, text=item_name).grid(row=row_i, column=0)
-            tk.Label(item_frame, text=price).grid(row=row_i, column=1)
-            tk.Label(item_frame, text=quantity).grid(row=row_i, column=2)
-            tk.Label(item_frame, text=f"Total: {total}").grid(row=row_i, column=3)
-            tk.Button(item_frame, text="Delete", command=lambda i=i: delete_item(i)).grid(row=row_i, column=4)
-        
-        s_row = len(items) + 1
-        item_entry.grid(row=s_row, column=0)
-        price_entry.grid(row=s_row, column=1)
-        quantity_entry.grid(row=s_row, column=2)
-        add_item_button.grid(row=s_row + 1, columnspan=3)
-          
-    
-    item_frame = tk.Frame(person_frame)
-    item_frame.pack()
-    
-    item_entry = tk.Entry(item_frame)
-    price_entry = tk.Entry(item_frame)
-    quantity_entry = tk.Entry(item_frame)
-    add_item_button = tk.Button(item_frame, text="Add Item", command=add_item)
-    update_items()
-    
-    delete_person_button = tk.Button(person_frame, text="Delete Person", command=delete_person)
-    delete_person_button.pack(side=tk.BOTTOM, padx=10, pady=5)
+    if name:
+        data[name] = {'items': []}
+        update_display()
+        name_entry.delete(0, tk.END)
 
-# main window
+# Function to add a new item for a person
+def add_item(person, item_name, price, quantity):
+    try:
+        price = int(price)
+        quantity = int(quantity)
+        total = price * quantity
+        data[person]['items'].append((item_name, price, quantity, total))
+        update_display()
+    except ValueError:
+        # Handle invalid input
+        pass
+
+# Function to update the display
+def update_display():
+    for person_frame in main_frame.winfo_children():
+        person_frame.destroy()
+
+    for person, person_data in data.items():
+        person_frame = tk.Frame(main_frame, bd=2, relief=tk.RAISED)
+        person_frame.pack(pady=5, padx=10, fill=tk.BOTH)
+
+        person_label = tk.Label(person_frame, text=person)
+        person_label.pack(side=tk.LEFT, padx=10)
+
+        total = sum(item[3] for item in person_data['items'])
+        total_label = tk.Label(person_frame, text=f"Total: Rs-{total}")
+        total_label.pack(side=tk.RIGHT, padx=10)
+
+        item_frame = tk.Frame(person_frame)
+        item_frame.pack()
+
+        for i, (item_name, price, quantity, total) in enumerate(person_data['items']):
+            tk.Label(item_frame, text=item_name).grid(row=i, column=0)
+            tk.Label(item_frame, text=price).grid(row=i, column=1)
+            tk.Label(item_frame, text=quantity).grid(row=i, column=2)
+            tk.Label(item_frame, text=f"Total: Rs-{total}").grid(row=i, column=3)
+
+        delete_person_button = tk.Button(person_frame, text="Delete Person", command=lambda p=person: delete_person(p))
+        delete_person_button.pack(side=tk.BOTTOM, padx=10, pady=5)
+
+# Function to delete a person and their data
+def delete_person(person):
+    del data[person]
+    update_display()
+
+# Main window
 root = tk.Tk()
 root.title("Expense Tracker")
 
-# main frame
+# Main frame
 main_frame = tk.Frame(root)
 main_frame.pack()
 
-# heading
+# Heading
 heading_label = tk.Label(main_frame, text="Expense Tracker", font=("Helvetica", 16))
 heading_label.pack(pady=10)
 
-# frame for adding people
+# Frame for adding people
 add_person_frame = tk.Frame(main_frame, bd=2, relief=tk.RAISED)
 add_person_frame.pack(pady=10, padx=10)
 
@@ -98,6 +78,16 @@ name_entry = tk.Entry(add_person_frame)
 name_entry.grid(row=0, column=1, padx=5)
 add_button = tk.Button(add_person_frame, text="Add Person", command=add_person)
 add_button.grid(row=0, column=2, padx=5)
+
+# Input fields for adding items
+item_name_entry = tk.Entry(add_person_frame)
+price_entry = tk.Entry(add_person_frame)
+quantity_entry = tk.Entry(add_person_frame)
+add_item_button = tk.Button(add_person_frame, text="Add Item", command=lambda: add_item(name_entry.get(), item_name_entry.get(), price_entry.get(), quantity_entry.get()))
+item_name_entry.grid(row=1, column=0, padx=5)
+price_entry.grid(row=1, column=1, padx=5)
+quantity_entry.grid(row=1, column=2, padx=5)
+add_item_button.grid(row=1, column=3, padx=5)
 
 # Start the main loop
 root.mainloop()
