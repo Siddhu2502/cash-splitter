@@ -10,7 +10,8 @@ This application helps to split bills between multiple people. It allows adding 
 - Calculate overall total bill amount
 - View amount each person needs to pay
 - Update/edit existing people and item details
-- Delete people and their items
+- Deletion of people and their associated items
+- Data saving functionality to enable later use
 
 ## Getting Started
 
