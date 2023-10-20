@@ -43,7 +43,7 @@ def add_person():
     person_label = tk.Label(person_frame, text=name)
     person_label.pack(side=tk.LEFT, padx=10)
     
-    total_label = tk.Label(person_frame, text="Total: Rs-0")
+    total_label = tk.Label(person_frame, text="Total: 0/-")
     total_label.pack(side=tk.RIGHT, padx=10)
     
     name_entry.delete(0, tk.END)
@@ -73,7 +73,7 @@ def add_person():
     
     def update_items():
         total = sum(item[3] for item in items)
-        total_label.config(text=f"Total: Rs-{total}")
+        total_label.config(text=f"Total: {total}/-")
         
         for widget in item_frame.winfo_children():
             widget.grid_forget()

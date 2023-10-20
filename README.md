@@ -82,3 +82,6 @@ The amounts owed by each person and overall total will automatically update as i
 ### Edit/Delete
 
 Users can edit existing people and item details as needed. They also have an option to delete people along with their associated items.
+
+## SOME Screenshots ?!!
+![image](images/howitshouldlook.png)
