@@ -4,7 +4,7 @@
 
 - [ ] updating with a scrolling option (the current one is not working)
 - [x] creating documentation
-- [ ] saving the bill !!
+- [x] saving the bill !!
 
 ## Medium Priority
 
